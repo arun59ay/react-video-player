@@ -1,5 +1,5 @@
 import React from "react";
-import { VideoPlayer } from "./components/VideoPlayer";
+import { VideoPlayer } from "../src/components/VideoPlayer";
 
 function App() {
   return (

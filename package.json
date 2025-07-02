@@ -11,9 +11,9 @@
   ],
   "scripts": {
     "dev": "vite",
+    "start:demo": "vite",
     "build": "tsc && vite build",
     "build:package": "rollup -c",
-    "lint": "eslint .",
     "preview": "vite preview",
     "prepublishOnly": "npm run build:package"
   },
