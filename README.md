@@ -31,6 +31,14 @@ Try it online (no setup required):
 
 ---
 
+🔗 Links
+🔧 [GitHub](https://github.com/arun59ay/react-video-player): https://github.com/arun59ay/react-video-player
+
+📦 [NPM](https://www.npmjs.com/package/@streamspark/react-video-player): https://www.npmjs.com/package/@streamspark/react-video-player
+
+⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
+
+
 ## 📦 Installation
 
 ```bash
@@ -179,17 +187,6 @@ We welcome contributions — PRs and issues are appreciated!
 
 📄 License
 MIT License — See LICENSE for details.
-
-
----
-
-
-🔗 Links
-🔧 [GitHub](https://github.com/arun59ay/react-video-player): https://github.com/arun59ay/react-video-player
-
-📦 [NPM](https://www.npmjs.com/package/@streamspark/react-video-player): https://www.npmjs.com/package/@streamspark/react-video-player
-
-⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
 
 ---
 
