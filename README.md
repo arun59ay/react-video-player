@@ -133,6 +133,7 @@ const App = () => (
 | `onError`        | `(error: string) => void`  | If video load/playback fails   |
 
 
+
 🧩 Project Structure
 
 @streamspark/react-video-player/
@@ -182,11 +183,13 @@ MIT License — See LICENSE for details.
 
 ---
 
-### 🔗 Links
 
-- 🔧 **GitHub:** [https://github.com/arun59ay/react-video-player](https://github.com/arun59ay/react-video-player)  
-- 📦 **NPM:** [https://www.npmjs.com/package/@streamspark/react-video-player](https://www.npmjs.com/package/@streamspark/react-video-player)  
-- ⚡ **Live Demo:** [https://stackblitz.com/github/arun59ay/react-video-player](https://stackblitz.com/github/arun59ay/react-video-player)
+🔗 Links
+🔧 [GitHub](https://github.com/arun59ay/react-video-player): https://github.com/arun59ay/react-video-player
+
+📦 [NPM](https://www.npmjs.com/package/@streamspark/react-video-player): https://www.npmjs.com/package/@streamspark/react-video-player
+
+⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
 
 ---
 
