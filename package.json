@@ -27,13 +27,23 @@
     "html5",
     "responsive",
     "youtube-like",
-    "react video player"
+    "react-video-player",
+    "video-component",
+    "react-component",
+    "react-media-player"
   ],
   "author": "Arun YT",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/arun59ay/react-video-player.git"
+    "url": "git+https://github.com/arun59ay/react-video-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arun59ay/react-video-player/issues"
+  },
+  "homepage": "https://github.com/arun59ay/react-video-player#readme",
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "react": ">=16.8.0",

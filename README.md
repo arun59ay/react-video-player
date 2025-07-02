@@ -1,30 +1,41 @@
-@streamspark/react-video-player
-A fully-featured, YouTube-like video player built completely from scratch using React and TypeScript — no third-party libraries involved.
+# @streamspark/react-video-player
+
+A fully-featured, YouTube-like video player built completely from scratch using **React** and **TypeScript** — no third-party libraries involved.
 
 Ideal for developers who want a clean, minimal, extensible, and dependency-free media player for their React applications.
 
-✅ Features
-🎬 Custom Controls – Play, Pause, Seek with buffering indicator
-🔇 Volume Control – Drag slider with mute toggle
-⏩ Enhanced Seek Bar – Shows current time, total duration, and buffering progress
-⚙️ Playback Speed – 0.25x to 2x in steps
-🌐 Subtitles – .vtt caption track support
-📺 Full-Screen Toggle – Native browser support
-🌓 Light/Dark Themes – Beautiful theme variations
-📱 Responsive Layout – Works across all devices
-🧠 Enhanced Keyboard Shortcuts – Full YouTube-like keyboard navigation
-🎯 TypeScript Support – Full type safety and IntelliSense
-♿ Accessibility – ARIA labels, keyboard navigation, screen reader support
-🎨 Custom Styling – Easy to customize with CSS variables
-📦 Zero Dependencies – No external libraries except React and Lucide icons
+---
 
-📦 Installation
-bash
-Copy
-Edit
+## ✅ Features
+
+- 🎬 **Custom Controls** – Play, Pause, Seek with buffering indicator  
+- 🔇 **Volume Control** – Slider with mute toggle  
+- ⏩ **Enhanced Seek Bar** – Current time, total duration & buffered progress  
+- ⚙️ **Playback Speed** – 0.25x to 2x in steps  
+- 🌐 **Subtitles Support** – WebVTT (.vtt) tracks  
+- 📺 **Fullscreen Toggle** – Native fullscreen  
+- 🌓 **Light/Dark Themes** – Easily switchable themes  
+- 📱 **Responsive Layout** – Works on all devices  
+- 🧠 **Keyboard Shortcuts** – Full YouTube-style controls  
+- 🎯 **TypeScript Support** – Full typings + IntelliSense  
+- ♿ **Accessibility** – ARIA labels, screen reader support  
+- 🎨 **Custom Styling** – Easily style via CSS variables  
+- 📦 **Zero Dependencies** – No libraries except React & Lucide icons
+
+---
+
+## 🚀 Live Demo
+
+Try it instantly on StackBlitz (no setup needed):  
+👉 [https://stackblitz.com/github/arun59ay/react-video-player](https://stackblitz.com/github/arun59ay/react-video-player)
+
+---
+
+## 📦 Installation
+
+```bash
 npm install @streamspark/react-video-player
-🛠 Usage
-Basic Usage
+🛠 Basic Usage
 tsx
 Copy
 Edit
@@ -39,7 +50,7 @@ const App = () => (
     theme="dark"
   />
 );
-Advanced Usage with All Props
+🔧 Advanced Usage
 tsx
 Copy
 Edit
@@ -70,47 +81,47 @@ const App = () => (
     onError={(error) => console.error('Video error:', error)}
   />
 );
-🎮 Enhanced Keyboard Shortcuts
+🎮 Keyboard Shortcuts
 Action	Keys
-Play/Pause	Space or K
-Seek backward 10s	← or J
-Seek forward 10s	→ or L
-Volume up	↑
-Volume down	↓
-Mute/Unmute	M
-Fullscreen toggle	F
-Decrease speed	Shift + ,
-Increase speed	Shift + .
-Go to start	Home
-Go to end	End
+Play / Pause	Space or K
+Seek -10s	← or J
+Seek +10s	→ or L
+Volume Up	↑
+Volume Down	↓
+Mute / Unmute	M
+Fullscreen Toggle	F
+Decrease Speed	Shift + ,
+Increase Speed	Shift + .
+Jump to Start	Home
+Jump to End	End
 
 📋 Props API
 Prop	Type	Default	Description
 src	string	required	Video source URL
-poster	string	undefined	Poster image URL
-captions	string	undefined	WebVTT captions file URL
-title	string	undefined	Video title
+poster	string	undefined	Poster image
+captions	string	undefined	Subtitles (.vtt)
+title	string	undefined	Title for accessibility
 theme	'light' | 'dark'	'dark'	Player theme
-autoplay	boolean	false	Auto-play video on load
-loop	boolean	false	Loop video playback
-muted	boolean	false	Start video muted
-controls	boolean	true	Show/hide player controls
-width	string | number	'100%'	Player width
-height	string | number	'auto'	Player height
+autoplay	boolean	false	Auto-play the video
+loop	boolean	false	Loop playback
+muted	boolean	false	Start muted
+controls	boolean	true	Show/hide controls
+width	string | number	'100%'	Custom width
+height	string | number	'auto'	Custom height
 className	string	''	Additional CSS class
-style	CSSProperties	{}	Inline styles
+style	React.CSSProperties	{}	Inline styles
 
 🎯 Event Callbacks
 Callback	Type	Description
-onPlay	() => void	Called when video starts playing
-onPause	() => void	Called when video is paused
-onTimeUpdate	(time: number) => void	Called on time updates
-onVolumeChange	(volume: number) => void	Called on volume changes
-onSeek	(time: number) => void	Called when seeking
+onPlay	() => void	Called when video plays
+onPause	() => void	Called when paused
+onTimeUpdate	(time: number) => void	Called during time change
+onVolumeChange	(volume: number) => void	Called on volume change
+onSeek	(time: number) => void	Called when user seeks
 onEnded	() => void	Called when video ends
-onError	(error: string) => void	Called on errors
+onError	(error: string) => void	Called on video error
 
-🗂️ Project Structure
+📁 Project Structure
 pgsql
 Copy
 Edit
@@ -135,6 +146,8 @@ Edit
 ├── tsconfig.json
 └── README.md
 🎨 Custom Styling
+Use CSS variables to customize the player:
+
 css
 Copy
 Edit
@@ -145,24 +158,33 @@ Edit
   --rvp-border-radius: 8px;
 }
 🧠 Built Without
-❌ No react-player
-❌ No hls.js
-❌ No video.js
-❌ No external state managers
-❌ No styling libraries
+❌ react-player
+
+❌ hls.js
+
+❌ video.js
+
+❌ external state managers
+
+❌ UI libraries
+
+Everything is crafted using React, native browser APIs, and vanilla CSS.
 
 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to open issues or submit pull requests.
 
 📄 License
-MIT License - see LICENSE file for details.
+MIT License — see LICENSE file for full details.
 
 🔗 Links
-GitHub Repository
+🧠 GitHub: github.com/arun59ay/react-video-player
 
-NPM Package
+📦 NPM: npmjs.com/package/@streamspark/react-video-player
 
-Demo
+⚡ Live Demo: stackblitz.com/github/arun59ay/react-video-player
 
+Made with ❤️ by Arun YT
 
-
+yaml
+Copy
+Edit
