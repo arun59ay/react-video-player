@@ -39,6 +39,9 @@ Try it online (no setup required):
 
 ⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
 
+ <a href="https://stackblitz.com/github/arun59ay/react-video-player?embed=1&file=src/App.tsx&view=preview" target="_blank" rel="noopener noreferrer">⚡ Live Preview</a>
+
+
 
 ## 📦 Installation
 
