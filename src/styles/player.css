@@ -20,6 +20,27 @@
   cursor: pointer;
 }
 
+
+.rvp-video-overlay.rvp-show {
+  pointer-events: auto; /* Enable controls only when shown */
+  opacity: 1;
+}
+
+.rvp-video {
+  cursor: pointer;
+   pointer-events: auto !important; /* ensure video receives click */
+  z-index: 1;
+}
+
+
+.rvp-video-overlay * {
+  pointer-events: auto;
+}
+
+.rvp-video-overlay .rvp-video-title,
+.rvp-video-overlay .rvp-video-controls {
+  pointer-events: auto; /* Enable click on controls inside overlay */
+}
 .rvp-video-overlay {
   position: absolute;
   top: 0;
@@ -32,19 +53,16 @@
     transparent 20%,
     transparent 80%,
     rgba(0, 0, 0, 0.8) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  ); 
+  opacity: 1 !important;
+  transition: opacity 0.01s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
-.rvp-video-overlay.rvp-show {
-  opacity: 1;
-  pointer-events: all;
-}
+
 
 .rvp-video-title {
   padding: 20px;
