@@ -48,8 +48,14 @@ Try it online (no setup required):
 ```bash
 npm install @streamspark/react-video-player
 
+You also need to import the default styles manually:
+
+import '@streamspark/react-video-player/dist/index.css';
+
+
 import React from 'react';
 import { VideoPlayer } from '@streamspark/react-video-player';
+import '@streamspark/react-video-player/dist/index.css';
 
 export default function App() {
   return (
@@ -65,6 +71,7 @@ export default function App() {
 
 import React from 'react';
 import { VideoPlayer } from '@streamspark/react-video-player';
+import '@streamspark/react-video-player/dist/index.css';
 
 const App = () => (
   <VideoPlayer
@@ -155,7 +162,7 @@ const App = () => (
 │   ├── types/            # Type definitions
 │   ├── styles/           # CSS styles
 │   └── index.ts          # Entry point
-├── demo/                 # Vite + Tailwind demo project
+├── demo/                 # Vite + manual CSS demo project
 ├── dist/                 # Compiled output
 ├── package.json
 ├── tsconfig.json

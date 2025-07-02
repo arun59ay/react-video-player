@@ -1,12 +1,13 @@
 {
   "name": "@streamspark/react-video-player",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A fully-featured, YouTube-like video player built completely from scratch using React and TypeScript.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "dist/player.css",
     "README.md"
   ],
   "scripts": {
