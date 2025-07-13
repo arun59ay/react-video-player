@@ -29,14 +29,16 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [showControls, setShowControls] = useState(true);
-  const [showPlayPause, setShowPlayPause] = useState(false);
-  const [showSeekFeedback, setShowSeekFeedback] = useState(false);
-  const [seekFeedbackText, setSeekFeedbackText] = useState('');
-  const [showVolumeFeedback, setShowVolumeFeedback] = useState(false);
-  const [volumeFeedbackText, setVolumeFeedbackText] = useState('');
+  const [isControlsVisible, setIsControlsVisible] = useState(true);
+  const [feedback, setFeedback] = useState({
+    playPause: false,
+    seek: false,
+    seekText: '',
+    volume: false,
+    volumeText: ''
+  });
+  const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false);
 
   const videoState = useVideo(videoRef, containerRef, {
     onPlay,
@@ -48,19 +50,25 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onError,
     onSeekFeedback: (timeDiff: number) => {
       if (Math.abs(timeDiff) >= 5) {
-        setSeekFeedbackText(timeDiff > 0 ? `+${Math.round(timeDiff)}s` : `${Math.round(timeDiff)}s`);
-        setShowSeekFeedback(true);
-        setTimeout(() => setShowSeekFeedback(false), 1000);
+        setFeedback(prev => ({
+          ...prev,
+          seek: true,
+          seekText: `${timeDiff > 0 ? '+' : ''}${Math.round(timeDiff)}s`
+        }));
+        setTimeout(() => setFeedback(prev => ({ ...prev, seek: false })), 1000);
       }
     },
     onVolumeFeedback: (volume: number, isMuted: boolean) => {
-      setVolumeFeedbackText(isMuted ? 'Muted' : `${Math.round(volume * 100)}%`);
-      setShowVolumeFeedback(true);
-      setTimeout(() => setShowVolumeFeedback(false), 1000);
+      setFeedback(prev => ({
+        ...prev,
+        volume: true,
+        volumeText: isMuted ? 'Muted' : `${Math.round(volume * 100)}%`
+      }));
+      setTimeout(() => setFeedback(prev => ({ ...prev, volume: false })), 1000);
     },
     onPlayPauseFeedback: () => {
-      setShowPlayPause(true);
-      setTimeout(() => setShowPlayPause(false), 800);
+      setFeedback(prev => ({ ...prev, playPause: true }));
+      setTimeout(() => setFeedback(prev => ({ ...prev, playPause: false })), 800);
     }
   });
 
@@ -85,92 +93,44 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     formatTime
   } = videoState;
 
-  const clearControlsTimeout = () => {
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
-    }
-  };
-
-  const showControlsTemporarily = () => {
-    setShowControls(true);
-    clearControlsTimeout();
-    controlsTimeoutRef.current = setTimeout(() => {
-      if (isPlaying) {
-        setShowControls(false);
-      }
-    }, 3000);
-  };
-
-  const handleMouseMove = () => {
-    if (!controls) return;
-    showControlsTemporarily();
-  };
-
-  const handleMouseLeave = () => {
-    if (!controls) return;
-    if (isPlaying) {
-      clearControlsTimeout();
-      controlsTimeoutRef.current = setTimeout(() => {
-        setShowControls(false);
-      }, 1000);
-    }
-  };
-
-  const handleContainerClick = (e: React.MouseEvent) => {
-    const clickedElement = e.target as HTMLElement;
-    const isControl = clickedElement.closest(
-      '.rvp-video-overlay, .rvp-control-btn, .rvp-seek-bar-container, .rvp-volume-slider, .rvp-speed-menu, .rvp-feedback-overlay'
-    );
-    if (!isControl) {
-      togglePlay();
-      showControlsTemporarily();
-    }
-    containerRef.current?.focus();
-  };
-
   useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const showControls = () => setIsControlsVisible(true);
+    const hideControls = () => isPlaying && setIsControlsVisible(false);
+
+    node.addEventListener('mouseenter', showControls);
+    node.addEventListener('mousemove', showControls);
+    node.addEventListener('mouseleave', hideControls);
+
     return () => {
-      clearControlsTimeout();
+      node.removeEventListener('mouseenter', showControls);
+      node.removeEventListener('mousemove', showControls);
+      node.removeEventListener('mouseleave', hideControls);
     };
-  }, []);
+  }, [isPlaying]);
 
   useEffect(() => {
-    if (!isPlaying || !controls) setShowControls(true);
-  }, [isPlaying, controls]);
+    if (!isPlaying) setIsControlsVisible(true);
+  }, [isPlaying]);
 
   useEffect(() => {
-    if (videoRef.current && muted) videoRef.current.muted = true;
-  }, [muted]);
-
-  useEffect(() => {
-    containerRef.current?.focus();
-  }, []);
-
-useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (
-      e.code === 'Space' &&
-      document.activeElement === containerRef.current
-    ) {
-      e.preventDefault();
-      togglePlay();
-      showControlsTemporarily();
-    }
-  };
-
-  window.addEventListener('keydown', handleKeyDown);
-  return () => window.removeEventListener('keydown', handleKeyDown);
-}, [isPlaying]);
-
+    const handleClickOutside = (e: MouseEvent) => {
+      const volSlider = document.querySelector('.rvp-volume-slider');
+      if (isVolumeSliderOpen && volSlider && !volSlider.contains(e.target as Node)) {
+        setIsVolumeSliderOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isVolumeSliderOpen]);
 
   return (
     <div
       ref={containerRef}
-      className={`rvp-video-player rvp-${theme} ${className}`}
+      className={`rvp-video-player ${theme === 'light' ? 'rvp-light' : ''} ${isControlsVisible ? '' : 'rvp-hide-controls'} ${className}`}
       style={{ width, height, ...style }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => containerRef.current?.focus()}
       tabIndex={0}
       role="application"
       aria-label={title || 'Video Player'}
@@ -201,7 +161,7 @@ useEffect(() => {
 
       {isLoading && <LoadingSpinner />}
 
-      {showPlayPause && (
+      {feedback.playPause && (
         <div className="rvp-feedback-overlay rvp-play-pause-feedback">
           <div className="rvp-feedback-icon">
             {isPlaying ? (
@@ -217,29 +177,20 @@ useEffect(() => {
         </div>
       )}
 
-      {showSeekFeedback && (
+      {feedback.seek && (
         <div className="rvp-feedback-overlay rvp-seek-feedback">
-          <div className="rvp-feedback-text">{seekFeedbackText}</div>
+          <div className="rvp-feedback-text">{feedback.seekText}</div>
         </div>
       )}
 
-      {showVolumeFeedback && (
+      {feedback.volume && (
         <div className="rvp-feedback-overlay rvp-volume-feedback">
-          <div className="rvp-feedback-text">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '8px' }}>
-              {volumeFeedbackText === 'Muted' ? (
-                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-              ) : (
-                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-              )}
-            </svg>
-            {volumeFeedbackText}
-          </div>
+          <div className="rvp-feedback-text">{feedback.volumeText}</div>
         </div>
       )}
 
       {controls && (
-        <div className={`rvp-video-overlay ${showControls ? 'rvp-show' : ''}`}>
+        <div className={`rvp-video-overlay ${isControlsVisible ? 'rvp-show' : ''}`}>
           {title && (
             <div className="rvp-video-title">
               <h3>{title}</h3>
@@ -259,17 +210,21 @@ useEffect(() => {
             hasCaptions={!!captions}
             onPlay={togglePlay}
             onSeek={seek}
-            onVolumeChange={setVolume}
+            onVolumeChange={(vol) => {
+              setVolume(vol);
+              setIsVolumeSliderOpen(true);
+            }}
             onMute={toggleMute}
             onPlaybackRateChange={setPlaybackRate}
             onFullscreen={toggleFullscreen}
             onToggleCaptions={toggleCaptions}
             formatTime={formatTime}
+            src={src}
+            isVolumeSliderOpen={isVolumeSliderOpen}
+            setIsVolumeSliderOpen={setIsVolumeSliderOpen}
           />
         </div>
       )}
     </div>
   );
 };
-
-export type { VideoPlayerProps };

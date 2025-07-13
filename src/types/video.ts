@@ -23,7 +23,7 @@ export interface VideoControls {
 }
 
 export interface VideoPlayerProps {
-  src: string;
+ src: string;
   poster?: string;
   captions?: string;
   title?: string;
@@ -38,7 +38,7 @@ export interface VideoPlayerProps {
   style?: React.CSSProperties;
   onPlay?: () => void;
   onPause?: () => void;
-  onTimeUpdate?: (currentTime: number) => void;
+  onTimeUpdate?: (time: number) => void;
   onVolumeChange?: (volume: number) => void;
   onSeek?: (time: number) => void;
   onEnded?: () => void;

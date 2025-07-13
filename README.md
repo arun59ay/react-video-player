@@ -24,6 +24,32 @@ Perfect for developers looking for a **clean**, **minimal**, **extensible**, and
 
 ---
 
+## ✨ New & Improved (vNext)
+
+> Bringing the YouTube-like polish and precision to your player 🎉
+
+  ### 🧠 Smarter Control Visibility
+  - Controls remain visible as long as your mouse is **anywhere inside** the player.
+  - They hide **only when the mouse leaves** — just like YouTube.
+  - No more disappearing buttons during playback!
+
+  ### 🔊 Volume Panel Behavior
+  - ✅ **No accidental volume changes** on hover.
+  - 🖱️ Click to open the volume slider.
+  - ✖️ Clicking anywhere outside automatically closes it.
+
+  ### 🎞️ YouTube-Style Seek Bar
+  - Draggable thumb with smooth, modern hover effects.
+  - Cleanly stacked buffer + played progress bars.
+  - Precise styling for **pixel-perfect alignment**.
+
+  ### 📷 Instant Thumbnail Preview *(Optional)*
+  - Hover previews powered by `<video>` + `<canvas>`.
+  - Works with both **sprite frames** and **per-second captures**.
+  - Fully optimized for performance — previews load instantly.
+
+---
+
 ## 🚀 Live Demo
 
 Try it online (no setup required):  
