@@ -6,16 +6,21 @@ interface VolumeProps {
   isMuted: boolean;
   onVolumeChange: (volume: number) => void;
   onMute: () => void;
+  isVolumeSliderOpen: boolean;
+  setIsVolumeSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onVolumeHover?: (hovering: boolean) => void; // ← make use of this
 }
 
 export const Volume: React.FC<VolumeProps> = ({
   volume,
   isMuted,
   onVolumeChange,
-  onMute
+  onMute,
+  isVolumeSliderOpen,
+  setIsVolumeSliderOpen,
+  onVolumeHover
 }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [showSlider, setShowSlider] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const getVolumeIcon = () => {
@@ -31,7 +36,7 @@ export const Volume: React.FC<VolumeProps> = ({
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging) {
+    if (isDragging && e.buttons === 1) { // only drag when mouse is pressed
       handleVolumeChange(e);
     }
   };
@@ -42,7 +47,6 @@ export const Volume: React.FC<VolumeProps> = ({
 
   const handleVolumeChange = (e: React.MouseEvent) => {
     if (!sliderRef.current) return;
-
     const rect = sliderRef.current.getBoundingClientRect();
     const percentage = Math.max(0, Math.min(100, ((rect.bottom - e.clientY) / rect.height) * 100));
     const newVolume = percentage / 100;
@@ -50,23 +54,27 @@ export const Volume: React.FC<VolumeProps> = ({
   };
 
   return (
-    <div 
+    <div
       className="rvp-volume-control"
-      onMouseEnter={() => setShowSlider(true)}
+      onMouseEnter={() => {
+        setIsVolumeSliderOpen(true);
+        onVolumeHover?.(true);
+      }}
       onMouseLeave={() => {
-        if (!isDragging) setShowSlider(false);
+        if (!isDragging) setIsVolumeSliderOpen(false);
+        onVolumeHover?.(false);
       }}
     >
-      <button 
-        className="rvp-control-btn rvp-volume-btn" 
+      <button
+        className="rvp-control-btn rvp-volume-btn"
         onClick={onMute}
         aria-label={isMuted ? 'Unmute' : 'Mute'}
       >
         {getVolumeIcon()}
       </button>
-      
-      <div className={`rvp-volume-slider ${showSlider ? 'rvp-show' : ''}`}>
-        <div 
+
+      <div className={`rvp-volume-slider ${isVolumeSliderOpen ? 'rvp-show' : ''}`}>
+        <div
           className="rvp-volume-slider-track"
           ref={sliderRef}
           onMouseDown={handleMouseDown}
@@ -80,11 +88,11 @@ export const Volume: React.FC<VolumeProps> = ({
           tabIndex={0}
         >
           <div className="rvp-volume-slider-background">
-            <div 
+            <div
               className="rvp-volume-slider-fill"
               style={{ height: `${isMuted ? 0 : volume * 100}%` }}
             />
-            <div 
+            <div
               className="rvp-volume-slider-thumb"
               style={{ bottom: `${isMuted ? 0 : volume * 100}%` }}
             />

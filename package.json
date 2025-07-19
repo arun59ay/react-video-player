@@ -1,10 +1,23 @@
 {
   "name": "@streamspark/react-video-player",
-  "version": "1.0.7",
-  "description": "A fully-featured, YouTube-like video player built completely from scratch using React and TypeScript.",
+  "version": "1.0.9",
+  "type": "module",
+  "description": "A fully customizable, YouTube-style React video player with subtitles, thumbnails, keyboard shortcuts, and zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  },
   "files": [
     "dist",
     "dist/player.css",
@@ -14,24 +27,36 @@
     "dev": "vite",
     "start:demo": "vite",
     "build": "tsc && vite build",
-    "build:package": "rollup -c",
+    "build:package": "rollup -c rollup.config.mjs",
     "preview": "vite preview",
     "prepublishOnly": "npm run build:package"
   },
   "keywords": [
     "react",
-    "video",
-    "player",
+    "video player",
+    "custom video player",
+    "youtube-style player",
+    "react video player",
+    "html5 video",
+    "media player",
+    "accessible",
     "typescript",
-    "custom",
-    "media",
-    "html5",
+    "subtitles",
+    "keyboard shortcuts",
     "responsive",
-    "youtube-like",
-    "react-video-player",
-    "video-component",
-    "react-component",
-    "react-media-player"
+    "lightweight",
+    "open source",
+    "react component",
+    "thumbnail preview",
+    "react-player alternative",
+    "custom video player",
+    "youtube player",
+    "thumbnail preview",
+    "react-player alternative",
+    "react video player",
+    "react video player typescript",
+    "react video player javascript",
+    "react light video player"
   ],
   "author": "Arun YT",
   "license": "MIT",

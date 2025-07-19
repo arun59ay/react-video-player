@@ -27,6 +27,7 @@ interface ControlsProps {
   src: string;
   isVolumeSliderOpen: boolean;
   setIsVolumeSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onVolumeHover: (hovering: boolean) => void;
 }
 
 export const Controls: React.FC<ControlsProps> = ({
@@ -50,7 +51,8 @@ export const Controls: React.FC<ControlsProps> = ({
   formatTime,
   src,
   isVolumeSliderOpen,
-  setIsVolumeSliderOpen
+  setIsVolumeSliderOpen,
+  onVolumeHover 
 }) => {
   return (
     <div className="rvp-video-controls">
@@ -102,6 +104,7 @@ export const Controls: React.FC<ControlsProps> = ({
             onMute={onMute}
             isVolumeSliderOpen={isVolumeSliderOpen}
             setIsVolumeSliderOpen={setIsVolumeSliderOpen}
+            onVolumeHover={onVolumeHover} // ✅ ADD THIS LINE
           />
 
           <div className="rvp-time-display">

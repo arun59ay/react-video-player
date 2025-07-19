@@ -1,11 +1,13 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json'); // ✅ safe import without `assert`
+
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import esbuild from 'rollup-plugin-esbuild';
 import { dts } from 'rollup-plugin-dts';
-
-import pkg from './package.json' assert { type: 'json' };
 
 export default [
   {
@@ -45,9 +47,9 @@ export default [
     external: ['react', 'react-dom'],
   },
   {
-input: 'src/index.ts',
-  output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-  plugins: [dts()],
-  external: [/\.css$/],
+    input: 'src/index.ts',
+    output: [{ file: 'dist/index.d.ts', format: 'esm' }],
+    plugins: [dts()],
+    external: [/\.css$/],
   },
 ];

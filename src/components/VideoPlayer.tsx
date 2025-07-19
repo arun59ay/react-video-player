@@ -25,10 +25,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   onVolumeChange,
   onSeek,
   onEnded,
-  onError
+  onError,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isHoveringRef = useRef(false);
 
   const [isControlsVisible, setIsControlsVisible] = useState(true);
   const [feedback, setFeedback] = useState({
@@ -58,7 +59,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setTimeout(() => setFeedback(prev => ({ ...prev, seek: false })), 1000);
       }
     },
-    onVolumeFeedback: (volume: number, isMuted: boolean) => {
+    onVolumeFeedback: (volume, isMuted) => {
       setFeedback(prev => ({
         ...prev,
         volume: true,
@@ -93,12 +94,28 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     formatTime
   } = videoState;
 
+  // ✅ Show/hide controls based on activity
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
 
-    const showControls = () => setIsControlsVisible(true);
-    const hideControls = () => isPlaying && setIsControlsVisible(false);
+    let timeout: NodeJS.Timeout;
+
+    const showControls = () => {
+      setIsControlsVisible(true);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        if (isPlaying && !isHoveringRef.current && !isVolumeSliderOpen) {
+          setIsControlsVisible(false);
+        }
+      }, 3000);
+    };
+
+    const hideControls = () => {
+      if (isPlaying && !isHoveringRef.current && !isVolumeSliderOpen) {
+        setIsControlsVisible(false);
+      }
+    };
 
     node.addEventListener('mouseenter', showControls);
     node.addEventListener('mousemove', showControls);
@@ -108,23 +125,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       node.removeEventListener('mouseenter', showControls);
       node.removeEventListener('mousemove', showControls);
       node.removeEventListener('mouseleave', hideControls);
+      clearTimeout(timeout);
     };
-  }, [isPlaying]);
+  }, [isPlaying, isVolumeSliderOpen]);
 
+  // Keep controls visible when video is paused
   useEffect(() => {
     if (!isPlaying) setIsControlsVisible(true);
   }, [isPlaying]);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const volSlider = document.querySelector('.rvp-volume-slider');
-      if (isVolumeSliderOpen && volSlider && !volSlider.contains(e.target as Node)) {
-        setIsVolumeSliderOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isVolumeSliderOpen]);
 
   return (
     <div
@@ -222,6 +231,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             src={src}
             isVolumeSliderOpen={isVolumeSliderOpen}
             setIsVolumeSliderOpen={setIsVolumeSliderOpen}
+            onVolumeHover={(hovering) => {
+              isHoveringRef.current = hovering;
+            }}
           />
         </div>
       )}
