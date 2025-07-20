@@ -209,7 +209,7 @@ Override the look via your own styles:
 
 ---
 
-🧩 Project Structure
+## 🧩 Project Structure
 
 @streamspark/react-video-player/
 ├── src/
@@ -225,7 +225,7 @@ Override the look via your own styles:
 └── README.md
 
 
-🎨 Custom Styling
+## 🎨 Custom Styling
 You can override styling using CSS variables:
 
 .rvp-video-player {

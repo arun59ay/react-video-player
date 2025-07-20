@@ -1,0 +1,7 @@
+demo/
+src/
+rollup.config.mjs
+tsconfig*
+vite.config.*
+.eslintrc*
+*.log

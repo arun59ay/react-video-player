@@ -1,3 +1,4 @@
+import terser from '@rollup/plugin-terser';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json'); // ✅ safe import without `assert`
@@ -8,6 +9,8 @@ import postcss from 'rollup-plugin-postcss';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import esbuild from 'rollup-plugin-esbuild';
 import { dts } from 'rollup-plugin-dts';
+import { visualizer } from 'rollup-plugin-visualizer';
+
 
 export default [
   {
@@ -32,7 +35,7 @@ export default [
       }),
       commonjs(),
       esbuild({
-        include: /\.[jt]sx?$/, // Compile .ts, .tsx, .js, .jsx
+        include: /\.[jt]sx?$/,
         exclude: /node_modules/,
         sourceMap: true,
         target: 'esnext',
@@ -43,7 +46,9 @@ export default [
         extract: true,
         minimize: true,
       }),
-    ],
+      terser(), 
+      visualizer({ filename: 'bundle-stats.html', open: true }),
+    ],    
     external: ['react', 'react-dom'],
   },
   {

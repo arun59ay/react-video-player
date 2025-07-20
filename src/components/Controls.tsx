@@ -1,6 +1,5 @@
 // ✅ Controls.tsx
 import React from 'react';
-import { Play, Pause, Maximize, Minimize, Type } from 'lucide-react';
 import { SeekBar } from './SeekBar';
 import { Volume } from './Volume';
 import { PlaybackSpeed } from './PlaybackSpeed';
@@ -29,6 +28,52 @@ interface ControlsProps {
   setIsVolumeSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onVolumeHover: (hovering: boolean) => void;
 }
+
+
+const PlayIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+);
+
+const PauseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="6" y="4" width="4" height="16" />
+    <rect x="14" y="4" width="4" height="16" />
+  </svg>
+);
+
+const MaximizeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 3 21 3 21 9" />
+    <polyline points="9 21 3 21 3 15" />
+    <line x1="21" y1="3" x2="14" y2="10" />
+    <line x1="3" y1="21" x2="10" y2="14" />
+  </svg>
+);
+
+const MinimizeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="4 14 10 14 10 20" />
+    <polyline points="20 10 14 10 14 4" />
+    <line x1="14" y1="10" x2="21" y2="3" />
+    <line x1="10" y1="14" x2="3" y2="21" />
+  </svg>
+);
+
+const CaptionsIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" ry="2" />
+    <line x1="4" y1="12" x2="10" y2="12" />
+    <line x1="14" y1="12" x2="20" y2="12" />
+  </svg>
+);
+
 
 export const Controls: React.FC<ControlsProps> = ({
   isPlaying,
@@ -94,7 +139,7 @@ export const Controls: React.FC<ControlsProps> = ({
             onClick={onPlay}
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
-            {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+            {isPlaying ? <PauseIcon/> : <PlayIcon/>}
           </button>
 
           <Volume
@@ -122,7 +167,7 @@ export const Controls: React.FC<ControlsProps> = ({
               title="Toggle Captions"
               aria-label="Toggle Captions"
             >
-              <Type size={20} />
+              <CaptionsIcon/>
             </button>
           )}
 
@@ -136,7 +181,7 @@ export const Controls: React.FC<ControlsProps> = ({
             onClick={onFullscreen}
             aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
           >
-            {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+            {isFullscreen ? <MinimizeIcon/> : <MaximizeIcon/>}
           </button>
         </div>
       </div>
