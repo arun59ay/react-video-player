@@ -1,8 +1,8 @@
-# 🎥 @streamspark/react-video-player
+# 🎥 @sreact-video-player
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@streamspark/react-video-player">
-    <img src="https://img.shields.io/npm/v/@streamspark/react-video-player.svg" alt="npm version" />
+  <a href="https://www.npmjs.com/package/react-video-player">
+    <img src="https://img.shields.io/npm/v/react-video-player.svg" alt="npm version" />
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" />
@@ -77,7 +77,7 @@ Try it online (no setup required):
 
 🔧 [GitHub](https://github.com/arun59ay/react-video-player): https://github.com/arun59ay/react-video-player
 
-📦 [NPM](https://www.npmjs.com/package/@streamspark/react-video-player): https://www.npmjs.com/package/@streamspark/react-video-player
+📦 [NPM](https://www.npmjs.com/package/react-video-player): https://www.npmjs.com/package/react-video-player
 
 ⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
 
@@ -88,16 +88,16 @@ Try it online (no setup required):
 ## 📦 Installation
 
 ```bash
-npm install @streamspark/react-video-player
+npm install react-video-player
 
 You also need to import the default styles manually:
 
-import '@streamspark/react-video-player/dist/index.css';
+import 'react-video-player/dist/index.css';
 
 
 import React from 'react';
-import { VideoPlayer } from '@streamspark/react-video-player';
-import '@streamspark/react-video-player/dist/index.css';
+import { VideoPlayer } from 'react-video-player';
+import 'react-video-player/dist/index.css';
 
 export default function App() {
   return (
@@ -112,8 +112,8 @@ export default function App() {
 
 
 import React from 'react';
-import { VideoPlayer } from '@streamspark/react-video-player';
-import '@streamspark/react-video-player/dist/index.css';
+import { VideoPlayer } from 'react-video-player';
+import 'react-video-player/dist/index.css';
 
 const App = () => (
   <VideoPlayer
@@ -211,7 +211,7 @@ Override the look via your own styles:
 
 ## 🧩 Project Structure
 
-@streamspark/react-video-player/
+react-video-player/
 ├── src/
 │   ├── components/       # All modular player components
 │   ├── hooks/            # Custom video hook
