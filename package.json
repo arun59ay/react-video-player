@@ -1,6 +1,6 @@
 {
   "name": "@streamspark/react-video-player",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "type": "module",
   "description": "A fully customizable, YouTube-style React video player with subtitles, thumbnails, keyboard shortcuts, and zero dependencies.",
   "main": "dist/index.js",
