@@ -263,7 +263,7 @@ We welcome feature suggestions, bug reports, and contributions!
 ## 📄 License
 
 MIT License  
-© 2025 – Arun YT
+© 2025 – Arun
 
 ---
 
