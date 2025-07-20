@@ -1,8 +1,8 @@
 {
-  "name": "@streamspark/react-video-player",
-  "version": "1.0.12",
+  "name": "react-video-player",
+  "version": "1.0.0",
   "type": "module",
-  "description": "A fully customizable, YouTube-style React video player with subtitles, thumbnails, keyboard shortcuts, and zero dependencies.",
+    "description": "A customizable React video player with no dependencies",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -54,7 +54,7 @@
     "open source",
     "react player alternative"
   ],
-  "author": "Arun YT",
+  "author": "Arun",
   "license": "MIT",
   "repository": {
     "type": "git",
