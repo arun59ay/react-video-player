@@ -77,7 +77,7 @@ Try it online (no setup required):
 
 🔧 [GitHub](https://github.com/arun59ay/react-video-player): https://github.com/arun59ay/react-video-player
 
-📦 [NPM](https://www.npmjs.com/package/react-video-player): https://www.npmjs.com/package/react-video-player
+📦 [NPM](https://www.npmjs.com/package/react-smart-video-player): https://www.npmjs.com/package/react-smart-video-player
 
 ⚡ [Live Demo](https://stackblitz.com/github/arun59ay/react-video-player): https://stackblitz.com/github/arun59ay/react-video-player
 
