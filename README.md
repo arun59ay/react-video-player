@@ -1,4 +1,4 @@
-# 🎥 @react-video-player
+# 🎥 @react-smart-video-player
 
 <p align="center">
   <a href="https://www.npmjs.com/package/react-video-player">

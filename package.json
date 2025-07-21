@@ -1,8 +1,8 @@
 {
-  "name": "react-video-player",
-  "version": "1.0.0",
+  "name": "react-smart-video-player",
+  "version": "1.0.1",
   "type": "module",
-    "description": "A customizable React video player with no dependencies",
+  "description": "A customizable React video player with no dependencies",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
