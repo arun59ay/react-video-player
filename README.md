@@ -1,4 +1,4 @@
-# 🎥 @react-smart-video-player
+# 🎥 @streamspark/react-video-player
 
 <p align="center">
   <a href="https://www.npmjs.com/package/react-video-player">
@@ -29,12 +29,13 @@ Perfect for developers looking for a **clean**, **minimal**, **extensible**, and
 
 - 🎬 Custom play/pause/seek controls (with buffer indicator)
 - 🔊 Volume control with mute & smooth slider behavior
-- ⏩ Modern seek bar with time + hover support
+- ⏩ **Live seek drag** - YouTube-style real-time scrubbing
 - 📺 Fullscreen toggle
 - 🌐 Subtitle (.vtt) support
+- 📝 **Custom draggable captions** with full styling control
 - ⚙️ Playback speed control (0.25x – 2x)
 - 🌓 Light & dark themes
-- 📱 Fully responsive layout
+- 📱 Fully responsive layout & mobile touch support
 - 🎮 YouTube-style keyboard shortcuts
 - ♿ Accessible (ARIA & screen reader friendly)
 - 🎨 Themeable via CSS variables
@@ -42,7 +43,24 @@ Perfect for developers looking for a **clean**, **minimal**, **extensible**, and
 
 ---
 
-## ✨ What’s New
+## ✨ What's New
+
+### ⏩ **Live Seek Drag** *(NEW!)*
+- **YouTube-style scrubbing** - drag the seek bar thumb for real-time seeking
+- **Live video preview** - see video content as you drag through the timeline
+- **Smooth interaction** - no delay between drag and video response
+- **Cross-platform support** - works on both desktop and mobile devices
+- **Enhanced visual feedback** - thumb grows during drag for better grip
+- **Touch-friendly** - optimized for finger dragging on mobile devices
+
+### 📝 **Custom Draggable Captions** *(NEW!)*
+- **Fully customizable captions** with complete styling control
+- **Drag & drop positioning** - move captions anywhere on the video
+- **YouTube-like styling** - clean, unobtrusive appearance
+- **Mobile touch support** - drag with finger on mobile devices
+- **Boundary constraints** - captions stay within video player bounds
+- **Timing control** - precise start/end times for each caption
+- **Visual feedback** - hover effects and drag indicators
 
 ### 🧠 Smarter Control Visibility  
 - Controls remain visible while mouse is **anywhere** inside the player  
@@ -110,6 +128,118 @@ export default function App() {
   );
 }
 
+### 📝 Custom Draggable Captions
+
+```tsx
+import React from 'react';
+import { VideoPlayer } from 'react-video-player';
+import { CaptionConfig } from 'react-video-player';
+
+const customCaptions: CaptionConfig[] = [
+  {
+    text: "🎬 Welcome to our video!",
+    startTime: 0,
+    endTime: 5,
+    style: {
+      fontSize: '16px',
+      color: '#ffffff',
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      position: 'bottom',
+      padding: '8px 12px',
+      borderRadius: '4px',
+      fontWeight: 'bold'
+    }
+  },
+  {
+    text: "📱 Drag me anywhere!",
+    startTime: 5,
+    endTime: 10,
+    style: {
+      fontSize: '14px',
+      color: '#ff6b6b',
+      backgroundColor: 'rgba(255, 107, 107, 0.9)',
+      position: 'top',
+      padding: '6px 10px',
+      borderRadius: '6px',
+      textAlign: 'center'
+    }
+  }
+];
+
+const App = () => (
+  <VideoPlayer
+    src="/videos/sample.mp4"
+    customCaptions={customCaptions}
+    title="Custom Captions Demo"
+    theme="dark"
+    width="100%"
+    height="400px"
+  />
+);
+```
+
+**CaptionConfig Interface:**
+```tsx
+interface CaptionConfig {
+  text: string;                    // Caption text content
+  startTime: number;               // Start time in seconds
+  endTime: number;                 // End time in seconds
+  style?: {
+    fontSize?: string;             // Font size (e.g., '16px')
+    fontFamily?: string;           // Font family
+    color?: string;                // Text color
+    backgroundColor?: string;      // Background color
+    padding?: string;              // Padding (e.g., '8px 12px')
+    borderRadius?: string;         // Border radius
+    textAlign?: 'left' | 'center' | 'right';
+    position?: 'bottom' | 'top';   // Default position
+    margin?: string;               // Margin
+    opacity?: number;              // Opacity (0-1)
+    textShadow?: string;           // Text shadow
+    fontWeight?: string | number;   // Font weight
+    lineHeight?: string;           // Line height
+    maxWidth?: string;             // Max width
+    wordWrap?: 'break-word' | 'normal';
+    zIndex?: number;               // Z-index
+    border?: string;               // Border
+    boxShadow?: string;            // Box shadow
+  };
+}
+```
+
+**Features:**
+- ✅ **Drag & Drop**: Click and drag captions anywhere on the video
+- ✅ **Mobile Touch**: Touch and drag on mobile devices  
+- ✅ **Boundary Constraints**: Captions stay within video player bounds
+- ✅ **Visual Feedback**: Hover effects and drag indicators
+- ✅ **Position Memory**: Captions remember their position after dragging
+- ✅ **Full Styling**: Complete control over appearance and positioning
+
+### ⏩ Live Seek Drag
+
+The video player includes YouTube-style live seek dragging for smooth video scrubbing:
+
+```tsx
+import React from 'react';
+import { VideoPlayer } from 'react-video-player';
+
+const App = () => (
+  <VideoPlayer
+    src="/videos/sample.mp4"
+    title="Live Seek Demo"
+    // Live seek drag is enabled by default
+    // Just drag the seek bar thumb to scrub through the video
+  />
+);
+```
+
+**Live Seek Features:**
+- ✅ **Real-time Scrubbing**: Drag the seek bar thumb to jump through video
+- ✅ **Live Preview**: See video content as you drag through the timeline
+- ✅ **Smooth Interaction**: No delay between drag and video response
+- ✅ **Cross-platform**: Works on both desktop and mobile devices
+- ✅ **Enhanced Feedback**: Thumb grows during drag for better grip
+- ✅ **Touch Optimized**: Finger-friendly dragging on mobile devices
 
 import React from 'react';
 import { VideoPlayer } from 'react-video-player';
@@ -162,21 +292,22 @@ const App = () => (
 
 📋 Props API
 
-| Prop        | Type                  | Default     | Description                         |
-| ----------- | --------------------- | ----------- | ----------------------------------- |
-| `src`       | `string`              | — *(req)*   | Video source URL                    |
-| `poster`    | `string`              | `undefined` | Poster image                        |
-| `captions`  | `string`              | `undefined` | WebVTT subtitles file               |
-| `title`     | `string`              | `undefined` | Accessible title for screen readers |
-| `theme`     | `'light' \| 'dark'`   | `'dark'`    | UI Theme                            |
-| `autoplay`  | `boolean`             | `false`     | Autoplay on load                    |
-| `loop`      | `boolean`             | `false`     | Loop the video                      |
-| `muted`     | `boolean`             | `false`     | Mute by default                     |
-| `controls`  | `boolean`             | `true`      | Show/hide player controls           |
-| `width`     | `string` or `number`  | `'100%'`    | Custom player width                 |
-| `height`    | `string` or `number`  | `'auto'`    | Custom player height                |
-| `className` | `string`              | `''`        | Custom class for the wrapper        |
-| `style`     | `React.CSSProperties` | `{}`        | Inline styles                       |
+| Prop            | Type                  | Default     | Description                         |
+| --------------- | --------------------- | ----------- | ----------------------------------- |
+| `src`           | `string`              | — *(req)*   | Video source URL                    |
+| `poster`        | `string`              | `undefined` | Poster image                        |
+| `captions`      | `string`              | `undefined` | WebVTT subtitles file               |
+| `customCaptions`| `CaptionConfig[]`     | `undefined` | Custom draggable captions array    |
+| `title`         | `string`              | `undefined` | Accessible title for screen readers |
+| `theme`         | `'light' \| 'dark'`   | `'dark'`    | UI Theme                            |
+| `autoplay`      | `boolean`             | `false`     | Autoplay on load                    |
+| `loop`          | `boolean`             | `false`     | Loop the video                      |
+| `muted`         | `boolean`             | `false`     | Mute by default                     |
+| `controls`      | `boolean`             | `true`      | Show/hide player controls           |
+| `width`         | `string` or `number`  | `'100%'`    | Custom player width                 |
+| `height`        | `string` or `number`  | `'auto'`    | Custom player height                |
+| `className`     | `string`              | `''`        | Custom class for the wrapper        |
+| `style`         | `React.CSSProperties` | `{}`        | Inline styles                       |
 
 
 

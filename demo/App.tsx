@@ -1,8 +1,83 @@
-import React from "react";
 import { VideoPlayer } from "../src/components/VideoPlayer";
+import { CaptionConfig } from "../src/types/video";
 import './src/index.css';
 
 function App() {
+  // Custom captions configuration
+  const customCaptions: CaptionConfig[] = [
+    {
+      text: "🎬 Welcome to React Video Player!",
+      startTime: 0,
+      endTime: 8,
+      style: {
+        fontSize: '14px',
+        color: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        fontWeight: 'normal',
+        position: 'bottom',
+        padding: '4px 8px',
+        borderRadius: '2px',
+        textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+        zIndex: 10,
+        maxWidth: '80%',
+        textAlign: 'center'
+      }
+    },
+    {
+      text: "✨ This video demonstrates\ncustomizable captions",
+      startTime: 8,
+      endTime: 16,
+      style: {
+        fontSize: '14px',
+        color: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        textAlign: 'center',
+        position: 'bottom',
+        padding: '4px 8px',
+        borderRadius: '2px',
+        fontWeight: 'normal',
+        lineHeight: '1.4',
+        zIndex: 10,
+        maxWidth: '80%'
+      }
+    },
+    {
+      text: "🎨 Fully customizable styling!",
+      startTime: 16,
+      endTime: 24,
+      style: {
+        fontSize: '14px',
+        color: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        textAlign: 'center',
+        position: 'bottom',
+        padding: '4px 8px',
+        borderRadius: '2px',
+        fontWeight: 'normal',
+        textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+        zIndex: 10,
+        maxWidth: '80%'
+      }
+    },
+    {
+      text: "📱 Mobile touch compatible",
+      startTime: 24,
+      endTime: 32,
+      style: {
+        fontSize: '14px',
+        color: '#ffffff',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        textAlign: 'center',
+        position: 'bottom',
+        padding: '4px 8px',
+        borderRadius: '2px',
+        opacity: 1,
+        zIndex: 10,
+        maxWidth: '80%'
+      }
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-900 p-8">
       <div className="max-w-4xl mx-auto">
@@ -11,22 +86,35 @@ function App() {
         </h1>
 
         <div className="space-y-8">
-          {/* Main Demo Player */}
+          {/* Main Demo Player with Custom Captions */}
           <div className="bg-gray-800 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-white mb-4">
-              Dark Theme Player
+              Dark Theme Player with Custom Captions
             </h2>
             <VideoPlayer
               src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
               poster="https://images.pexels.com/photos/1144176/pexels-photo-1144176.jpeg?auto=compress&cs=tinysrgb&w=800"
-              title="Big Buck Bunny - Demo Video"
+              title="Big Buck Bunny - Demo Video with Custom Captions"
               theme="dark"
+              customCaptions={customCaptions}
               autoplay={false}
               loop={false}
               onPlay={() => console.log("Video started playing")}
               onPause={() => console.log("Video paused")}
               onTimeUpdate={(time) => console.log("Time update:", time)}
             />
+            <div className="mt-4 p-4 bg-yellow-900 border border-yellow-600 rounded-lg">
+              <div className="flex items-center mb-2">
+                <span className="text-yellow-400 text-lg mr-2">⚠️</span>
+                <p className="text-sm text-yellow-200 font-semibold">
+                  <strong>IMPORTANT:</strong> Click the CC (captions) button in the player controls to enable custom captions!
+                </p>
+              </div>
+              <p className="text-sm text-yellow-100">
+                This player showcases customizable captions with different styles, positions, and timing. 
+                Watch the captions appear at different times with various styling options!
+              </p>
+            </div>
           </div>
 
           {/* Light Theme Demo */}
@@ -42,6 +130,69 @@ function App() {
               autoplay={false}
               loop={false}
             />
+          </div>
+
+          {/* Custom Captions Showcase */}
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              Custom Captions Showcase
+            </h2>
+            <div className="max-w-2xl mx-auto">
+              <VideoPlayer
+                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                poster="https://images.pexels.com/photos/1090637/pexels-photo-1090637.jpeg?auto=compress&cs=tinysrgb&w=400"
+                title="Custom Captions Demo"
+                theme="dark"
+                customCaptions={[
+                  {
+                    text: "🔥 For Bigger Blazes!",
+                    startTime: 0,
+                    endTime: 10,
+                    style: {
+                      fontSize: '14px',
+                      color: '#ffffff',
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                      fontWeight: 'normal',
+                      position: 'bottom',
+                      padding: '4px 8px',
+                      borderRadius: '2px',
+                      zIndex: 10,
+                      maxWidth: '80%',
+                      textAlign: 'center'
+                    }
+                  },
+                  {
+                    text: "Custom styling options",
+                    startTime: 5,
+                    endTime: 15,
+                    style: {
+                      fontSize: '14px',
+                      color: '#ffffff',
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                      textAlign: 'center',
+                      position: 'bottom',
+                      padding: '4px 8px',
+                      borderRadius: '2px',
+                      zIndex: 10,
+                      maxWidth: '80%'
+                    }
+                  }
+                ]}
+                width="100%"
+                height="300px"
+              />
+            </div>
+            <div className="mt-4 p-4 bg-yellow-900 border border-yellow-600 rounded-lg">
+              <div className="flex items-center mb-2">
+                <span className="text-yellow-400 text-lg mr-2">⚠️</span>
+                <p className="text-sm text-yellow-200 font-semibold">
+                  <strong>IMPORTANT:</strong> Click the CC (captions) button in the player controls to enable custom captions!
+                </p>
+              </div>
+              <p className="text-sm text-yellow-100">
+                <strong>Caption Features:</strong> Fully customizable text, timing, positioning, colors, fonts, and more!
+              </p>
+            </div>
           </div>
 
           {/* Compact Player */}
@@ -79,6 +230,7 @@ function App() {
                 <li>• Playback speed adjustment (0.25x - 2x)</li>
                 <li>• Full-screen toggle</li>
                 <li>• Subtitle support (.vtt files)</li>
+                <li>• <strong>Customizable captions</strong> with full styling control</li>
                 <li>• Loading spinner and error handling</li>
               </ul>
             </div>
@@ -89,6 +241,7 @@ function App() {
               <ul className="space-y-2">
                 <li>• Light and dark themes</li>
                 <li>• Responsive design</li>
+                <li>• <strong>Mobile touch support</strong> with gestures</li>
                 <li>• Enhanced keyboard shortcuts</li>
                 <li>• Auto-hide controls</li>
                 <li>• Smooth animations</li>
@@ -119,6 +272,38 @@ function App() {
           </div>
         </div>
 
+        {/* Custom Captions Documentation */}
+        <div className="mt-8 bg-gray-800 rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-white mb-6">
+            Custom Captions Configuration
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6 text-gray-300">
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Caption Properties
+              </h3>
+              <ul className="space-y-2 text-sm">
+                <li><strong>text:</strong> Caption content (supports \n for line breaks)</li>
+                <li><strong>startTime:</strong> When to show caption (seconds)</li>
+                <li><strong>endTime:</strong> When to hide caption (seconds)</li>
+                <li><strong>style:</strong> Custom styling options</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Styling Options
+              </h3>
+              <ul className="space-y-2 text-sm">
+                <li><strong>fontSize, fontFamily, color</strong></li>
+                <li><strong>backgroundColor, padding, borderRadius</strong></li>
+                <li><strong>textAlign, position (top/bottom)</strong></li>
+                <li><strong>opacity, textShadow, fontWeight</strong></li>
+                <li><strong>lineHeight, maxWidth, wordWrap</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         {/* Package Installation */}
         <div className="mt-8 bg-gray-800 rounded-lg p-6">
           <h2 className="text-xl font-bold text-white mb-4">
@@ -137,11 +322,26 @@ function App() {
               {`import React from 'react';
 import { VideoPlayer } from '@streamspark/react-video-player';
 
+const customCaptions = [
+  {
+    text: "Welcome to our video!",
+    startTime: 0,
+    endTime: 3,
+    style: {
+      fontSize: '18px',
+      color: '#ff6b6b',
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      position: 'top'
+    }
+  }
+];
+
 const App = () => (
   <VideoPlayer
     src="/videos/sample.mp4"
     poster="/images/thumb.jpg"
     captions="/captions/subtitles.vtt"
+    customCaptions={customCaptions}
     title="Demo Player"
     theme="dark"
     autoplay={false}

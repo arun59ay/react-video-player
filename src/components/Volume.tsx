@@ -11,7 +11,7 @@ interface VolumeProps {
 }
 
 const VolumeXIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M11 5L6 9H2v6h4l5 4V5z" />
     <line x1="23" y1="9" x2="17" y2="15" />
@@ -20,7 +20,7 @@ const VolumeXIcon = () => (
 );
 
 const Volume1Icon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M11 5L6 9H2v6h4l5 4V5z" />
     <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
@@ -28,7 +28,7 @@ const Volume1Icon = () => (
 );
 
 const Volume2Icon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M11 5L6 9H2v6h4l5 4V5z" />
     <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
@@ -70,10 +70,37 @@ export const Volume: React.FC<VolumeProps> = ({
     setIsDragging(false);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    if (e.touches.length > 0) {
+      handleVolumeChangeTouch(e.touches[0]);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isDragging && e.touches.length > 0) {
+      e.preventDefault();
+      handleVolumeChangeTouch(e.touches[0]);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   const handleVolumeChange = (e: React.MouseEvent) => {
     if (!sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
     const percentage = Math.max(0, Math.min(100, ((rect.bottom - e.clientY) / rect.height) * 100));
+    const newVolume = percentage / 100;
+    onVolumeChange(newVolume);
+  };
+
+  const handleVolumeChangeTouch = (touch: Touch) => {
+    if (!sliderRef.current) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const percentage = Math.max(0, Math.min(100, ((rect.bottom - touch.clientY) / rect.height) * 100));
     const newVolume = percentage / 100;
     onVolumeChange(newVolume);
   };
@@ -105,6 +132,9 @@ export const Volume: React.FC<VolumeProps> = ({
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           role="slider"
           aria-label="Volume"
           aria-valuemin={0}

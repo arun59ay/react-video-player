@@ -3,6 +3,8 @@
   position: relative;
   width: 100%;
   height: auto;
+  min-height: 300px;
+  aspect-ratio: 16/9;
   max-width: 100%;
   background: #000;
   border-radius: 8px;
@@ -15,9 +17,11 @@
 .rvp-video {
   width: 100%;
   height: 100%;
+  min-height: 300px;
   display: block;
   outline: none;
   cursor: pointer;
+  object-fit: cover;
 }
 
 
@@ -538,10 +542,93 @@
   color: #2980b9;
 }
 
+/* Responsive height adjustments */
+@media (max-width: 768px) {
+  .rvp-video-player {
+    min-height: 200px;
+    aspect-ratio: 16/9;
+  }
+  
+  .rvp-video {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rvp-video-player {
+    min-height: 180px;
+    aspect-ratio: 16/9;
+  }
+  
+  .rvp-video {
+    min-height: 180px;
+  }
+}
+
+/* Touch-friendly styles for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .rvp-video-player {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  .rvp-seekbar-container {
+    height: 8px;
+    touch-action: pan-x;
+    margin: 4px 0;
+  }
+  
+  .rvp-seekbar-track {
+    height: 8px;
+  }
+  
+  .rvp-seekbar-thumb {
+    width: 16px;
+    height: 16px;
+    top: -4px;
+  }
+  
+  .rvp-control-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+    touch-action: manipulation;
+  }
+  
+  .rvp-volume-slider {
+    height: 120px;
+    width: 50px;
+    padding: 15px;
+  }
+  
+  .rvp-volume-slider-track {
+    width: 8px;
+    touch-action: pan-y;
+  }
+  
+  .rvp-volume-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Prevent text selection on touch devices */
+  .rvp-video-overlay,
+  .rvp-controls-bar,
+  .rvp-time-display {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .rvp-video-player {
     border-radius: 0;
+    touch-action: manipulation;
   }
   
   .rvp-video-overlay {
@@ -551,6 +638,17 @@
       transparent 15%,
       transparent 85%,
       rgba(0, 0, 0, 0.9) 100%
+    );
+  }
+  
+  /* Light theme mobile overlay */
+  .rvp-video-player.rvp-light .rvp-video-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.9) 0%,
+      transparent 15%,
+      transparent 85%,
+      rgba(255, 255, 255, 0.95) 100%
     );
   }
   
@@ -576,7 +674,26 @@
   }
   
   .rvp-control-btn {
-    padding: 6px;
+    padding: 8px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+  
+  /* Light theme mobile controls */
+  .rvp-video-player.rvp-light .rvp-control-btn {
+    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-control-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-time-display {
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
   }
   
   .rvp-time-display {
@@ -589,9 +706,9 @@
   }
   
   .rvp-volume-slider {
-    height: 80px;
-    width: 35px;
-    padding: 10px;
+    height: 100px;
+    width: 40px;
+    padding: 12px;
   }
   
   .rvp-speed-menu {
@@ -618,6 +735,40 @@
     width: 60px;
     height: 60px;
   }
+  
+  /* Enhanced touch targets for mobile */
+  .rvp-seekbar-container {
+    height: 8px;
+    margin: 4px 0;
+  }
+  
+  .rvp-seekbar-track {
+    height: 8px;
+  }
+  
+  .rvp-seekbar-thumb {
+    width: 16px;
+    height: 16px;
+    top: -4px;
+  }
+  
+  /* Light theme mobile seek bar */
+  .rvp-video-player.rvp-light .rvp-seekbar-container {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-seekbar-buffered {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-seekbar-played {
+    background: #0066cc;
+  }
+  
+  .rvp-video-player.rvp-light .rvp-seekbar-thumb {
+    background: #0066cc;
+    border: 2px solid #ffffff;
+  }
 }
 
 @media (max-width: 480px) {
@@ -630,7 +781,9 @@
   }
   
   .rvp-control-btn {
-    padding: 4px;
+    padding: 6px;
+    min-width: 36px;
+    min-height: 36px;
   }
   
   .rvp-control-btn svg {
@@ -662,6 +815,43 @@
   .rvp-feedback-icon svg {
     width: 50px;
     height: 50px;
+  }
+  
+  /* Enhanced touch targets for small screens */
+  .rvp-seekbar-container {
+    height: 10px;
+    margin: 4px 0;
+  }
+  
+  .rvp-seekbar-track {
+    height: 10px;
+  }
+  
+  .rvp-seekbar-thumb {
+    width: 18px;
+    height: 18px;
+    top: -4px;
+  }
+  
+  .rvp-volume-slider {
+    height: 140px;
+    width: 45px;
+    padding: 18px;
+  }
+  
+  /* Light theme mobile controls visibility */
+  .rvp-video-player.rvp-light .rvp-control-btn {
+    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-control-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .rvp-video-player.rvp-light .rvp-time-display {
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
   }
 }
 
@@ -722,6 +912,104 @@
   }
 }
 
+/* Custom Captions - YouTube-like styling */
+.rvp-caption {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  font-size: 14px;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 4px 8px;
+  border-radius: 2px;
+  text-align: center;
+  margin: 0 auto;
+  opacity: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-weight: 400;
+  line-height: 1.4;
+  max-width: 80%;
+  word-wrap: break-word;
+  z-index: 10;
+  pointer-events: auto;
+  white-space: pre-wrap;
+  transition: opacity 0.3s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  user-select: none;
+}
+
+/* Dragging state */
+.rvp-caption-dragging {
+  cursor: grabbing !important;
+  z-index: 1000 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  transform: scale(1.05) !important;
+  transition: none !important;
+}
+
+/* Hover effect for draggable captions */
+.rvp-caption:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Captions button styling - no red background */
+.rvp-video-player:has([data-custom-captions="true"]) .rvp-control-btn[aria-label*="Captions"] {
+  background: transparent !important;
+  border: none !important;
+  animation: none !important;
+}
+
+/* Active captions button styling */
+.rvp-control-btn[aria-label*="Captions"].rvp-active {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+}
+
+.rvp-caption[data-position="top"] {
+  top: 20px;
+  bottom: auto;
+}
+
+/* Caption themes */
+.rvp-video-player.rvp-light .rvp-caption {
+  color: #333333;
+  background-color: rgba(255, 255, 255, 0.9);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Mobile caption styles - YouTube-like */
+@media (max-width: 768px) {
+  .rvp-caption {
+    font-size: 13px;
+    padding: 3px 6px;
+    margin: 0 auto 15px auto;
+    max-width: 90%;
+    bottom: 15px;
+  }
+  
+  .rvp-caption-dragging {
+    transform: scale(1.02) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .rvp-caption {
+    font-size: 12px;
+    padding: 2px 6px;
+    margin: 0 auto 10px auto;
+    max-width: 95%;
+    bottom: 10px;
+  }
+  
+  .rvp-caption-dragging {
+    transform: scale(1.01) !important;
+  }
+}
+
 /* Fullscreen styles */
 .rvp-video-player:fullscreen {
   border-radius: 0;
@@ -733,6 +1021,12 @@
 
 .rvp-video-player:fullscreen .rvp-video-title {
   padding: 40px;
+}
+
+.rvp-video-player:fullscreen .rvp-caption {
+  font-size: 18px;
+  padding: 10px 16px;
+  margin: 0 auto 30px auto;
 }
 
 
@@ -864,6 +1158,13 @@
   background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   cursor: pointer;
+  transition: height 0.2s ease, margin 0.2s ease;
+}
+
+/* YouTube-like hover effect for seek bar */
+.rvp-seekbar-container:hover {
+  height: 12px;
+  margin: 1px 0;
 }
 
 .rvp-seekbar-track {
@@ -875,6 +1176,12 @@
   background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   z-index: 1;
+  transition: height 0.2s ease;
+}
+
+/* Scale track on hover */
+.rvp-seekbar-container:hover .rvp-seekbar-track {
+  height: 12px;
 }
 
 .rvp-seekbar-buffered {
@@ -884,6 +1191,12 @@
   background: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   z-index: 2;
+  transition: height 0.2s ease;
+}
+
+/* Scale buffered section on hover */
+.rvp-seekbar-container:hover .rvp-seekbar-buffered {
+  height: 12px;
 }
 
 .rvp-seekbar-played {
@@ -893,6 +1206,12 @@
   background: #f03;
   border-radius: 4px;
   z-index: 3;
+  transition: height 0.2s ease;
+}
+
+/* Scale played section on hover */
+.rvp-seekbar-container:hover .rvp-seekbar-played {
+  height: 12px;
 }
 
 .rvp-seekbar-thumb {
@@ -904,4 +1223,31 @@
   border-radius: 50%;
   transform: translateX(-50%);
   z-index: 4;
+  transition: width 0.2s ease, height 0.2s ease, top 0.2s ease;
+  cursor: grab;
+  user-select: none;
+}
+
+/* Scale thumb on hover - make it larger */
+.rvp-seekbar-container:hover .rvp-seekbar-thumb {
+  width: 20px;
+  height: 20px;
+  top: -4px;
+}
+
+/* Dragging state */
+.rvp-seekbar-thumb:active {
+  cursor: grabbing;
+  width: 22px;
+  height: 22px;
+  top: -5px;
+  transition: none;
+}
+
+/* Disable text selection during drag */
+.rvp-seekbar-container:active {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

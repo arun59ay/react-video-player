@@ -133,8 +133,9 @@ export const useVideo = (
     if (textTracks.length > 0) {
       const track = textTracks[0];
       track.mode = captionsEnabled ? 'hidden' : 'showing';
-      setCaptionsEnabled(!captionsEnabled);
     }
+    // Always toggle captionsEnabled state for both VTT and custom captions
+    setCaptionsEnabled(!captionsEnabled);
   }, [captionsEnabled, videoRef]);
 
   const formatTime = useCallback((time: number): string => {

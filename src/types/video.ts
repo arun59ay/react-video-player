@@ -22,10 +22,37 @@ export interface VideoControls {
   formatTime: (time: number) => string;
 }
 
+export interface CaptionConfig {
+  text: string;
+  startTime: number;
+  endTime: number;
+  style?: {
+    fontSize?: string;
+    fontFamily?: string;
+    color?: string;
+    backgroundColor?: string;
+    padding?: string;
+    borderRadius?: string;
+    textAlign?: 'left' | 'center' | 'right';
+    position?: 'bottom' | 'top';
+    margin?: string;
+    opacity?: number;
+    textShadow?: string;
+    fontWeight?: string | number;
+    lineHeight?: string;
+    maxWidth?: string;
+    wordWrap?: 'break-word' | 'normal';
+    zIndex?: number;
+    border?: string;
+    boxShadow?: string;
+  };
+}
+
 export interface VideoPlayerProps {
- src: string;
+  src: string;
   poster?: string;
   captions?: string;
+  customCaptions?: CaptionConfig[];
   title?: string;
   theme?: 'light' | 'dark';
   autoplay?: boolean;
