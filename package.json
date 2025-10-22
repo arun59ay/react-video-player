@@ -1,6 +1,6 @@
 {
   "name": "streamspark/react-video-player",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "type": "module",
   "description": "A customizable React video player with no dependencies",
   "main": "dist/index.js",
