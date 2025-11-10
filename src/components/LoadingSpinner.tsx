@@ -1,9 +1,9 @@
-import React from 'react';
+import { memo } from 'react';
 
-export const LoadingSpinner: React.FC = () => {
+export const LoadingSpinner = memo(() => {
   return (
     <div className="rvp-video-loading">
       <div className="rvp-loading-spinner" aria-label="Loading video"></div>
     </div>
   );
-};
+});

@@ -10,6 +10,10 @@ tsconfig*
 postcss.config.*
 tailwind.config.js
 
+# Source maps (not needed in npm package - saves ~350KB)
+*.map
+dist/*.map
+
 # Ignore reports
 bundle-stats.html
 

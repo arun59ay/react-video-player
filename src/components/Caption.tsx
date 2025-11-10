@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo, useCallback } from 'react';
 
 export interface CaptionStyle {
   fontSize?: string;
@@ -29,7 +29,7 @@ export interface CaptionProps {
   draggable?: boolean;
 }
 
-export const Caption: React.FC<CaptionProps> = ({ 
+export const Caption = memo<CaptionProps>(({ 
   text, 
   isVisible, 
   style = {},
@@ -237,4 +237,4 @@ export const Caption: React.FC<CaptionProps> = ({
       {text}
     </div>
   );
-};
+});

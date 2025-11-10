@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, memo, useCallback } from 'react';
 import { useVideoThumbnailPreview } from '../hooks/useVideoPreviewExtractor';
 
 interface SeekBarProps {
@@ -10,7 +10,7 @@ interface SeekBarProps {
   src: string;
 }
 
-export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffered, onSeek, src }) => {
+export const SeekBar = memo<SeekBarProps>(({ currentTime, duration, buffered, onSeek, src, formatTime }) => {
   const seekBarRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
   const { handlePreview, hidePreview } = useVideoThumbnailPreview({ src });
@@ -18,34 +18,34 @@ export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffere
   const [isDragging, setIsDragging] = useState(false);
   const [dragTime, setDragTime] = useState(0);
 
-  const getSeekPosition = (clientX: number) => {
+  const getSeekPosition = useCallback((clientX: number) => {
     if (!seekBarRef.current) return 0;
     const rect = seekBarRef.current.getBoundingClientRect();
     const percent = (clientX - rect.left) / rect.width;
     return Math.max(0, Math.min(duration, percent * duration));
-  };
+  }, [duration]);
 
-  const handleSeek = (clientX: number) => {
+  const handleSeek = useCallback((clientX: number) => {
     const seekTime = getSeekPosition(clientX);
     onSeek(seekTime);
-  };
+  }, [getSeekPosition, onSeek]);
 
   // Live seek during drag
-  const handleDragSeek = (clientX: number) => {
+  const handleDragSeek = useCallback((clientX: number) => {
     const seekTime = getSeekPosition(clientX);
     setDragTime(seekTime);
     onSeek(seekTime); // Live seek like YouTube
-  };
+  }, [getSeekPosition, onSeek]);
 
   // Mouse drag handlers
-  const handleThumbMouseDown = (e: React.MouseEvent) => {
+  const handleThumbMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
     setDragTime(currentTime);
-  };
+  }, [currentTime]);
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isDragging) {
       handleDragSeek(e.clientX);
     } else {
@@ -56,35 +56,35 @@ export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffere
       } as React.MouseEvent<HTMLDivElement>;
       handlePreview(syntheticEvent, duration);
     }
-  };
+  }, [isDragging, handleDragSeek, handlePreview, duration]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
       hidePreview();
     }
-  };
+  }, [isDragging, hidePreview]);
 
   // Touch drag handlers
-  const handleThumbTouchStart = (e: React.TouchEvent) => {
+  const handleThumbTouchStart = useCallback((e: React.TouchEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
     setDragTime(currentTime);
-  };
+  }, [currentTime]);
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = useCallback((e: TouchEvent) => {
     if (isDragging && e.touches.length > 0) {
       handleDragSeek(e.touches[0].clientX);
     }
-  };
+  }, [isDragging, handleDragSeek]);
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
       hidePreview();
     }
-  };
+  }, [isDragging, hidePreview]);
 
   // Add/remove global event listeners for drag
   useEffect(() => {
@@ -106,28 +106,28 @@ export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffere
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd, hidePreview]);
 
-  const handleMouseSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging) {
       handleSeek(e.clientX);
     }
-  };
+  }, [isDragging, handleSeek]);
 
-  const handleTouchSeek = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchSeek = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (!isDragging && e.touches.length > 0) {
       handleSeek(e.touches[0].clientX);
     }
-  };
+  }, [isDragging, handleSeek]);
 
-  const handleSeekBarMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleSeekBarMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging) {
       handlePreview(e, duration);
     }
-  };
+  }, [isDragging, handlePreview, duration]);
 
-  const handleSeekBarTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleSeekBarTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     if (!isDragging && e.touches.length > 0) {
       // Create a synthetic mouse event for preview
       const syntheticEvent = {
@@ -136,17 +136,19 @@ export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffere
       } as React.MouseEvent<HTMLDivElement>;
       handlePreview(syntheticEvent, duration);
     }
-  };
+  }, [isDragging, handlePreview, duration]);
 
   // Use drag time when dragging, otherwise use current time
   const displayTime = isDragging ? dragTime : currentTime;
-  const playedPercent = (displayTime / duration) * 100;
-  const bufferedPercent = (buffered / duration) * 100;
+  // Ensure duration is valid and greater than 0 to avoid division by zero or invalid percentages
+  const validDuration = duration > 0 ? duration : 1;
+  const playedPercent = Math.min(100, Math.max(0, (displayTime / validDuration) * 100));
+  const bufferedPercent = Math.min(100, Math.max(0, (buffered / validDuration) * 100));
 
   return (
     <div
       ref={seekBarRef}
-      className="rvp-seekbar-container"
+      className={`rvp-seekbar-container ${isDragging ? 'rvp-dragging' : ''}`}
       onClick={handleMouseSeek}
       onMouseMove={handleSeekBarMouseMove}
       onMouseLeave={hidePreview}
@@ -166,4 +168,4 @@ export const SeekBar: React.FC<SeekBarProps> = ({ currentTime, duration, buffere
       />
     </div>
   );
-};
+});

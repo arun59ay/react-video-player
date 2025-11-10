@@ -1,4 +1,76 @@
 /* React Video Player Styles */
+/* CSS Custom Properties (Variables) for customization */
+.rvp-video-player {
+  /* Play Button */
+  --rvp-play-btn-bg: rgba(0, 0, 0, 0.36);
+  --rvp-play-btn-hover-bg: rgba(0, 0, 0, 0.9);
+  --rvp-play-btn-color: white;
+  --rvp-play-btn-radius: 50%;
+  --rvp-play-btn-width: 44px;
+  --rvp-play-btn-height: 44px;
+
+  /* Volume Button */
+  --rvp-volume-btn-bg: rgba(0, 0, 0, 0.36);
+  --rvp-volume-btn-hover-bg: rgba(0, 0, 0, 0.4);
+  --rvp-volume-btn-color: white;
+  --rvp-volume-btn-radius: 50%;
+
+  /* Control Buttons */
+  --rvp-control-btn-bg: transparent;
+  --rvp-control-btn-hover-bg: rgba(255, 255, 255, 0.2);
+  --rvp-control-btn-color: white;
+  --rvp-control-btn-padding: 8px;
+  --rvp-control-btn-width: 44px;
+  --rvp-control-btn-height: 44px;
+
+  /* Seek Bar */
+  --rvp-seekbar-height: 6px;
+  --rvp-seekbar-hover-height: 12px;
+  --rvp-seekbar-bg: rgba(255, 255, 255, 0.3);
+  --rvp-seekbar-played: #f03;
+  --rvp-seekbar-buffered: rgba(255, 255, 255, 0.4);
+  --rvp-seekbar-thumb: #f03;
+  --rvp-seekbar-thumb-size: 14px;
+  --rvp-seekbar-thumb-hover-size: 20px;
+  --rvp-seekbar-radius: 4px;
+
+  /* Volume Slider */
+  --rvp-volume-slider-width: 104px;
+  --rvp-volume-slider-height: 44px;
+  --rvp-volume-slider-bg: transparent;
+  --rvp-volume-slider-fill: #f03;
+  --rvp-volume-slider-thumb: #f03;
+  --rvp-volume-slider-thumb-size: 14px;
+  --rvp-volume-slider-radius: 22px;
+
+  /* Time Display */
+  --rvp-time-font-size: 14px;
+  --rvp-time-font-weight: 500;
+  --rvp-time-color: white;
+  --rvp-time-bg: rgba(0, 0, 0, 0.36);
+  --rvp-time-backdrop: blur(10px) saturate(180%);
+  --rvp-time-border: 1px solid rgba(255, 255, 255, 0.1);
+  --rvp-time-radius: 4px;
+  --rvp-time-padding: 4px 8px;
+  --rvp-time-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+
+  /* Controls Bar */
+  --rvp-controls-bar-bg: transparent;
+  --rvp-controls-bar-padding: 0;
+  --rvp-controls-bar-gap: 12px;
+  --rvp-controls-bar-radius: 0;
+  --rvp-controls-bar-height: 44px;
+  --rvp-controls-bar-min-height: 44px;
+
+  /* Tooltip */
+  --rvp-tooltip-bg: rgba(0, 0, 0, 0.9);
+  --rvp-tooltip-color: white;
+  --rvp-tooltip-font-size: 12px;
+  --rvp-tooltip-font-weight: 500;
+  --rvp-tooltip-padding: 6px 10px;
+  --rvp-tooltip-radius: 4px;
+}
+
 .rvp-video-player {
   position: relative;
   width: 100%;
@@ -22,6 +94,14 @@
   outline: none;
   cursor: pointer;
   object-fit: cover;
+  transition: opacity 0.2s ease;
+}
+
+/* Hide video during quality changes to prevent showing unwanted content */
+.rvp-video-player:has(.rvp-video-loading) .rvp-video,
+.rvp-video[data-changing-quality="true"] {
+  opacity: 0;
+  pointer-events: none;
 }
 
 
@@ -68,6 +148,24 @@
 
 
 
+.rvp-chapter-title {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 8px 16px;
+  border-radius: 4px;
+  z-index: 6;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+}
+
 .rvp-video-title {
   padding: 20px;
   color: white;
@@ -80,9 +178,15 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+/* Adjust video title position when chapter title is visible */
+.rvp-video-overlay:has(.rvp-chapter-title) .rvp-video-title {
+  top: 64px;
+}
+
 .rvp-video-controls {
   padding: 0 20px 20px;
   color: white;
+  position: relative; /* Ensure chapter markers are positioned relative to controls */
 }
 
 .rvp-seek-bar-container {
@@ -164,35 +268,170 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: var(--rvp-controls-bar-gap, 12px);
   margin-top: 8px;
+  background: var(--rvp-controls-bar-bg, transparent);
+  padding: var(--rvp-controls-bar-padding, 0);
+  border-radius: var(--rvp-controls-bar-radius, 0);
+  min-height: var(--rvp-controls-bar-min-height, 44px);
+  height: var(--rvp-controls-bar-height, 44px);
+  position: relative;
+  z-index: 10; /* Ensure controls bar is above seek bar */
 }
 
-.rvp-controls-left,
-.rvp-controls-right {
+.rvp-controls-left {
   display: flex;
   align-items: center;
   gap: 8px;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  flex: 0 1 auto; /* Changed from flex: 1 1 auto to prevent stretching */
+  height: 100%;
+}
+
+.rvp-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0; /* No gap - controls are grouped together */
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 4px;
+  height: 44px; /* Match button height */
 }
 
 .rvp-control-btn {
-  background: none;
+  background: var(--rvp-control-btn-bg, transparent);
   border: none;
-  color: white;
+  color: var(--rvp-control-btn-color, white);
   cursor: pointer;
-  padding: 8px;
+  padding: var(--rvp-control-btn-padding, 8px);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
   position: relative;
   outline: none;
+  height: var(--rvp-control-btn-height, 44px);
+  min-width: var(--rvp-control-btn-width, 44px);
 }
 
+/* YouTube-style tooltips */
+.rvp-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  padding: var(--rvp-tooltip-padding, 6px 10px);
+  background: var(--rvp-tooltip-bg, rgba(0, 0, 0, 0.9));
+  color: var(--rvp-tooltip-color, white);
+  font-size: var(--rvp-tooltip-font-size, 12px);
+  font-weight: var(--rvp-tooltip-font-weight, 500);
+  white-space: nowrap;
+  border-radius: var(--rvp-tooltip-radius, 4px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  z-index: 10000; /* Higher than seek bar (z-index: 4) to appear above it */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Small arrow pointing down */
+.rvp-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--rvp-tooltip-bg, rgba(0, 0, 0, 0.9));
+}
+
+/* Show tooltip on hover with delay (like YouTube) */
+.rvp-control-btn:hover .rvp-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-2px);
+  transition-delay: 0.5s; /* Delay before showing (like YouTube) */
+}
+
+/* Hide tooltip immediately when not hovering */
+.rvp-control-btn:not(:hover) .rvp-tooltip {
+  transition-delay: 0s;
+}
+
+/* Hide tooltip when menu is open (for dropdown components) */
+.rvp-playback-speed:hover .rvp-tooltip,
+.rvp-quality-selector:hover .rvp-tooltip,
+.rvp-social-share:hover .rvp-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s;
+}
+
+/* Play/Pause button - separate background */
+.rvp-play-btn {
+  background: var(--rvp-play-btn-bg, rgba(0, 0, 0, 0.36));
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--rvp-play-btn-radius, 50%);
+  height: var(--rvp-play-btn-height, 44px);
+  min-width: var(--rvp-play-btn-width, 44px);
+  width: var(--rvp-play-btn-width, 44px);
+  color: var(--rvp-play-btn-color, white);
+}
+
+/* Hover effect for other buttons - YouTube style */
 .rvp-control-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  background: var(--rvp-control-btn-hover-bg, rgba(255, 255, 255, 0.2));
+}
+
+/* Hover effect for play button - more specific to override general hover */
+.rvp-control-btn.rvp-play-btn:hover {
+  background: var(--rvp-play-btn-hover-bg, rgba(0, 0, 0, 0.9));
+}
+
+/* Volume button specific styling - YouTube style */
+.rvp-volume-btn {
+  min-width: 44px;
+  min-height: 44px;
+  height: 44px;
+  width: 44px;
+  background: rgba(0, 0, 0, 0.36); /* Default background like play button */
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%; /* Circular button when slider is closed */
+  transition: border-radius 0.2s ease, background 0.2s ease, backdrop-filter 0.2s ease, border 0.2s ease;
+}
+
+/* When slider is open, button becomes part of pill shape and loses individual background */
+.rvp-volume-control:has(.rvp-volume-slider.rvp-show) .rvp-volume-btn {
+  border-radius: 22px 0 0 22px; /* Left side of pill when slider is open */
+  background: transparent; /* Transparent when part of pill - parent has background */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none; /* No border when part of pill */
+}
+
+/* Volume button hover - when slider is closed */
+.rvp-volume-control:hover:not(:has(.rvp-volume-slider.rvp-show)) .rvp-volume-btn {
+  transform: none;
+  background: rgba(0, 0, 0, 0.4); /* Slightly darker on hover when closed */
+}
+
+/* Volume button hover - when slider is open (handled by parent) */
+.rvp-volume-control:hover:has(.rvp-volume-slider.rvp-show) .rvp-volume-btn {
+  transform: none;
 }
 
 .rvp-control-btn:active {
@@ -203,88 +442,159 @@
   background: rgba(255, 0, 0, 0.8);
 }
 
+/* Right-side controls buttons - transparent to inherit parent background */
+.rvp-controls-right .rvp-control-btn {
+  background: transparent; /* Transparent to show parent background */
+}
+
+/* Active state for right-side controls - override parent background */
+.rvp-controls-right .rvp-control-btn.rvp-active {
+  background: rgba(255, 0, 0, 0.8) !important;
+}
+
+/* Hover effect for right-side controls - override parent background */
+.rvp-controls-right .rvp-control-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
 .rvp-play-btn svg {
   margin-left: 2px;
 }
 
 .rvp-time-display {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--rvp-time-font-size, 14px);
+  font-weight: var(--rvp-time-font-weight, 500);
   white-space: nowrap;
   margin: 0 8px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  padding: var(--rvp-time-padding, 4px 8px);
+  text-shadow: var(--rvp-time-shadow, 0 1px 2px rgba(0, 0, 0, 0.8));
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  pointer-events: none;
+  background: var(--rvp-time-bg, rgba(0, 0, 0, 0.36));
+  backdrop-filter: var(--rvp-time-backdrop, blur(10px) saturate(180%));
+  -webkit-backdrop-filter: var(--rvp-time-backdrop, blur(10px) saturate(180%));
+  border: var(--rvp-time-border, 1px solid rgba(255, 255, 255, 0.1));
+  border-radius: var(--rvp-time-radius, 4px);
+  height: 44px; /* Match other controls */
+  display: flex;
+  align-items: center;
+  color: var(--rvp-time-color, white);
 }
 
-/* Volume Control */
+/* Volume Control - YouTube Style (Inline Horizontal) */
 .rvp-volume-control {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  overflow: visible;
+  background: transparent; /* No background when slider is closed */
+  border-radius: 22px; /* Pill shape when slider is open */
+  transition: background 0.2s ease, backdrop-filter 0.2s ease, border 0.2s ease;
+  height: 44px;
+  border: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Volume control with slider open - unified pill background */
+.rvp-volume-control:has(.rvp-volume-slider.rvp-show) {
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 4px;
+}
+
+/* Volume control hover - only apply when slider is open */
+.rvp-volume-control:hover:has(.rvp-volume-slider.rvp-show) {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .rvp-volume-slider {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 100px;
-  width: 40px;
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 8px;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  z-index: 10;
+  /* Inline horizontal slider - NOT a popup */
+  position: relative;
+  width: 0;
+  height: 44px; /* Match button height */
+  background: transparent; /* Shares parent background when open */
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 0;
+  margin-left: 0; /* No overlap - seamless connection */
+  opacity: 0;
+  overflow: visible; /* Changed from hidden to visible to prevent thumb clipping */
+  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              padding 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 0 22px 22px 0; /* Right side of pill when open */
 }
 
 .rvp-volume-slider.rvp-show {
+  width: var(--rvp-volume-slider-width, 104px);
   opacity: 1;
-  visibility: visible;
+  padding: 0 8px 0 4px;
+  pointer-events: auto;
 }
 
 .rvp-volume-slider-track {
- width: 4px;
-  height: 100%;
+  width: 100%;
+  height: 4px;
   position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
+  cursor: pointer;
+  background: transparent;
+  /* Add padding to prevent thumb from being clipped at edges */
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-left: -6px;
+  margin-right: -6px;
 }
 
 .rvp-volume-slider-background {
   position: relative;
-  width: 4px;
-  height: 100%;
+  width: 100%;
+  height: 3px;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
 }
 
 .rvp-volume-slider-fill {
-    position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 50%; /* dynamically adjusted via inline style */
-  background: white;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 50%; /* dynamically adjusted via inline style */
+  background: var(--rvp-volume-slider-fill, #f03);
   border-radius: 2px;
-  cursor: pointer;
+  transition: width 0.05s ease;
 }
 
 .rvp-volume-slider-thumb {
   position: absolute;
-  bottom: 50%; /* dynamically adjusted */
-  left: 50%;
-  transform: translate(-50%, 50%);
-  width: 12px;
-  height: 12px;
-  background: white;
+  left: 50%; /* dynamically adjusted */
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--rvp-volume-slider-thumb-size, 12px);
+  height: var(--rvp-volume-slider-thumb-size, 12px);
+  background: var(--rvp-volume-slider-thumb, white);
   border-radius: 50%;
   z-index: 2;
+  transition: left 0.05s ease, transform 0.1s ease;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+}
+
+/* Show thumb on hover or when dragging */
+.rvp-volume-control:hover .rvp-volume-slider-thumb,
+.rvp-volume-slider-thumb:active {
+  opacity: 1;
 }
 
 /* Playback Speed */
@@ -305,7 +615,10 @@
   position: absolute;
   bottom: 100%;
   right: 0;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 8px;
   margin-bottom: 8px;
@@ -313,7 +626,6 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
   z-index: 10;
 }
 
@@ -328,6 +640,7 @@
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 8px;
   padding: 0 8px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
 }
 
 .rvp-speed-option {
@@ -342,6 +655,7 @@
   font-size: 14px;
   transition: background-color 0.2s ease;
   outline: none;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
 }
 
 .rvp-speed-option:hover {
@@ -351,6 +665,360 @@
 .rvp-speed-option.rvp-active {
   background: rgba(255, 0, 0, 0.8);
   font-weight: 600;
+}
+
+/* Quality Selector */
+.rvp-quality-selector {
+  position: relative;
+}
+
+.rvp-quality-btn {
+  gap: 4px;
+}
+
+.rvp-quality-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rvp-quality-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  min-width: 120px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 11;
+}
+
+.rvp-quality-menu.rvp-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.rvp-quality-menu-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  padding: 0 8px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
+}
+
+.rvp-quality-option {
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  outline: none;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
+}
+
+.rvp-quality-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rvp-quality-option.rvp-active {
+  background: rgba(255, 0, 0, 0.8);
+  font-weight: 600;
+}
+
+/* Social Share */
+.rvp-social-share {
+  position: relative;
+}
+
+.rvp-share-btn {
+  gap: 4px;
+}
+
+.rvp-share-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 11;
+}
+
+.rvp-share-menu.rvp-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.rvp-share-menu-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  padding: 0 8px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
+}
+
+.rvp-share-option {
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  outline: none;
+  text-shadow: rgba(0, 0, 0, 0.5) 0px 0px 2px;
+}
+
+.rvp-share-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Chapter Markers - Hidden */
+.rvp-chapter-markers {
+  display: none; /* Hide chapter markers */
+}
+
+.rvp-chapter-marker {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.rvp-chapter-marker-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  margin: 0 auto;
+  transition: all 0.2s ease;
+}
+
+.rvp-chapter-marker:hover .rvp-chapter-marker-dot,
+.rvp-chapter-marker.rvp-active .rvp-chapter-marker-dot {
+  width: 12px;
+  height: 12px;
+  background: #ff0000;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+}
+
+.rvp-chapter-marker-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-bottom: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.rvp-chapter-marker:hover .rvp-chapter-marker-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Keyboard Shortcuts Help */
+.rvp-keyboard-shortcuts-help {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+}
+
+.rvp-keyboard-shortcuts-content {
+  background: rgba(0, 0, 0, 0.95);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.rvp-keyboard-shortcuts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.rvp-keyboard-shortcuts-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.rvp-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.rvp-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rvp-keyboard-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rvp-shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rvp-shortcut-item:last-child {
+  border-bottom: none;
+}
+
+.rvp-shortcut-keys {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.rvp-key {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  font-family: monospace;
+}
+
+.rvp-shortcut-action {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+/* Theater Mode */
+.rvp-video-player.rvp-theater-mode {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+/* Playlist Info */
+.rvp-playlist-info {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 5;
+}
+
+.rvp-video-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+/* Light theme styles for new menus */
+.rvp-video-player.rvp-light .rvp-quality-menu,
+.rvp-video-player.rvp-light .rvp-share-menu {
+  background: rgba(255, 255, 255, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.rvp-video-player.rvp-light .rvp-quality-option,
+.rvp-video-player.rvp-light .rvp-share-option {
+  color: #333;
+}
+
+.rvp-video-player.rvp-light .rvp-quality-option:hover,
+.rvp-video-player.rvp-light .rvp-share-option:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.rvp-video-player.rvp-light .rvp-quality-option.rvp-active {
+  background: rgba(0, 102, 204, 0.8);
+  color: white;
+}
+
+.rvp-video-player.rvp-light .rvp-chapter-marker-dot {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.rvp-video-player.rvp-light .rvp-chapter-marker:hover .rvp-chapter-marker-dot,
+.rvp-video-player.rvp-light .rvp-chapter-marker.rvp-active .rvp-chapter-marker-dot {
+  background: #0066cc;
+  box-shadow: 0 0 8px rgba(0, 102, 204, 0.6);
+}
+
+.rvp-video-player.rvp-light .rvp-chapter-marker-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+}
+
+.rvp-video-player.rvp-light .rvp-playlist-info {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
 }
 
 /* Loading Spinner */
@@ -502,7 +1170,10 @@
 
 .rvp-video-player.rvp-light .rvp-volume-slider,
 .rvp-video-player.rvp-light .rvp-speed-menu {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.36);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: #333;
 }
 
@@ -598,14 +1269,19 @@
   }
   
   .rvp-volume-slider {
-    height: 120px;
-    width: 50px;
-    padding: 15px;
+    height: 50px;
+    width: 0;
+    padding: 0;
+  }
+  
+  .rvp-volume-slider.rvp-show {
+    width: 120px; /* Doubled from 60px for longer slider on touch devices */
+    padding: 0 10px 0 4px;
   }
   
   .rvp-volume-slider-track {
-    width: 8px;
-    touch-action: pan-y;
+    height: 6px;
+    touch-action: pan-x;
   }
   
   .rvp-volume-slider-thumb {
@@ -621,6 +1297,37 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+  
+  /* Enhanced chapter markers for touch devices */
+  .rvp-chapter-markers {
+    height: 24px;
+    top: -10px;
+  }
+  
+  .rvp-chapter-marker {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+  
+  .rvp-chapter-marker-dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .rvp-chapter-marker.rvp-active .rvp-chapter-marker-dot {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Show tooltip on touch (tap) */
+  .rvp-chapter-marker:active .rvp-chapter-marker-tooltip {
+    opacity: 1;
+    visibility: visible;
   }
 }
 
@@ -706,9 +1413,14 @@
   }
   
   .rvp-volume-slider {
-    height: 100px;
-    width: 40px;
-    padding: 12px;
+    height: 45px;
+    width: 0;
+    padding: 0;
+  }
+  
+  .rvp-volume-slider.rvp-show {
+    width: 112px; /* Doubled from 56px for longer slider on tablets */
+    padding: 0 8px 0 4px;
   }
   
   .rvp-speed-menu {
@@ -834,9 +1546,50 @@
   }
   
   .rvp-volume-slider {
-    height: 140px;
-    width: 45px;
-    padding: 18px;
+    height: 50px;
+    width: 0;
+    padding: 0;
+  }
+  
+  .rvp-volume-slider.rvp-show {
+    width: 120px; /* Doubled from 60px for longer slider on mobile */
+    padding: 0 10px 0 4px;
+  }
+  
+  /* Enhanced chapter markers for small screens */
+  .rvp-chapter-markers {
+    height: 28px;
+    top: -12px;
+  }
+  
+  .rvp-chapter-marker {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .rvp-chapter-marker-dot {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .rvp-chapter-marker.rvp-active .rvp-chapter-marker-dot {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .rvp-chapter-marker-tooltip {
+    font-size: 11px;
+    padding: 3px 6px;
+    bottom: calc(100% + 6px);
+  }
+  
+  /* Show tooltip on touch (tap) */
+  .rvp-chapter-marker:active .rvp-chapter-marker-tooltip {
+    opacity: 1;
+    visibility: visible;
   }
   
   /* Light theme mobile controls visibility */
@@ -956,16 +1709,16 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* Captions button styling - no red background */
+/* Captions button styling - transparent by default, hover effect handled by .rvp-control-btn:hover */
 .rvp-video-player:has([data-custom-captions="true"]) .rvp-control-btn[aria-label*="Captions"] {
   background: transparent !important;
   border: none !important;
   animation: none !important;
 }
 
-/* Active captions button styling */
+/* Active captions button styling - red background when active */
 .rvp-control-btn[aria-label*="Captions"].rvp-active {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 0, 0, 0.8) !important;
   border: none !important;
 }
 
@@ -1159,11 +1912,13 @@
   border-radius: 4px;
   cursor: pointer;
   transition: height 0.2s ease, margin 0.2s ease;
+  z-index: 1; /* Lower than controls bar to allow tooltips to appear above */
 }
 
 /* YouTube-like hover effect for seek bar */
-.rvp-seekbar-container:hover {
-  height: 12px;
+.rvp-seekbar-container:hover,
+.rvp-seekbar-container.rvp-dragging {
+  height: var(--rvp-seekbar-hover-height, 12px);
   margin: 1px 0;
 }
 
@@ -1179,47 +1934,50 @@
   transition: height 0.2s ease;
 }
 
-/* Scale track on hover */
-.rvp-seekbar-container:hover .rvp-seekbar-track {
-  height: 12px;
+/* Scale track on hover and during drag */
+.rvp-seekbar-container:hover .rvp-seekbar-track,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-track {
+  height: var(--rvp-seekbar-hover-height, 12px);
 }
 
 .rvp-seekbar-buffered {
   position: absolute;
   top: 0;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
+  height: var(--rvp-seekbar-height, 6px);
+  background: var(--rvp-seekbar-buffered, rgba(255, 255, 255, 0.4));
+  border-radius: var(--rvp-seekbar-radius, 4px);
   z-index: 2;
   transition: height 0.2s ease;
 }
 
-/* Scale buffered section on hover */
-.rvp-seekbar-container:hover .rvp-seekbar-buffered {
-  height: 12px;
+/* Scale buffered section on hover and during drag */
+.rvp-seekbar-container:hover .rvp-seekbar-buffered,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-buffered {
+  height: var(--rvp-seekbar-hover-height, 12px);
 }
 
 .rvp-seekbar-played {
   position: absolute;
   top: 0;
-  height: 6px;
-  background: #f03;
-  border-radius: 4px;
+  height: var(--rvp-seekbar-height, 6px);
+  background: var(--rvp-seekbar-played, #f03);
+  border-radius: var(--rvp-seekbar-radius, 4px);
   z-index: 3;
   transition: height 0.2s ease;
 }
 
-/* Scale played section on hover */
-.rvp-seekbar-container:hover .rvp-seekbar-played {
-  height: 12px;
+/* Scale played section on hover and during drag */
+.rvp-seekbar-container:hover .rvp-seekbar-played,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-played {
+  height: var(--rvp-seekbar-hover-height, 12px);
 }
 
 .rvp-seekbar-thumb {
   position: absolute;
   top: -4px;
-  width: 14px;
-  height: 14px;
-  background: #f03;
+  width: var(--rvp-seekbar-thumb-size, 14px);
+  height: var(--rvp-seekbar-thumb-size, 14px);
+  background: var(--rvp-seekbar-thumb, #f03);
   border-radius: 50%;
   transform: translateX(-50%);
   z-index: 4;
@@ -1229,19 +1987,35 @@
 }
 
 /* Scale thumb on hover - make it larger */
-.rvp-seekbar-container:hover .rvp-seekbar-thumb {
-  width: 20px;
-  height: 20px;
+.rvp-seekbar-container:hover .rvp-seekbar-thumb,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-thumb {
+  width: var(--rvp-seekbar-thumb-hover-size, 20px);
+  height: var(--rvp-seekbar-thumb-hover-size, 20px);
   top: -4px;
 }
 
-/* Dragging state */
-.rvp-seekbar-thumb:active {
+/* Dragging state - prevent transitions and maintain size */
+.rvp-seekbar-container.rvp-dragging {
+  transition: none !important;
+}
+
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-track,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-buffered,
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-played {
+  transition: none !important;
+}
+
+.rvp-seekbar-container.rvp-dragging .rvp-seekbar-thumb {
   cursor: grabbing;
   width: 22px;
   height: 22px;
   top: -5px;
-  transition: none;
+  transition: none !important;
+}
+
+/* Active state for thumb */
+.rvp-seekbar-thumb:active {
+  cursor: grabbing;
 }
 
 /* Disable text selection during drag */
